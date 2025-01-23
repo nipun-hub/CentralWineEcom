@@ -7,6 +7,7 @@ import {
 import { Typography } from 'antd'
 import { ThemeContext } from '../../context/ThemeContext'
 import { Link, useNavigate } from 'react-router-dom'
+import { useGetImageQuery } from '../../features/api/imageSlice'
 
 const { Text } = Typography
 
@@ -14,6 +15,13 @@ const Footer = () => {
   const { theme } = useContext(ThemeContext)
 
   const navigate = useNavigate()
+
+  const { data: imageData, error, isLoading } = useGetImageQuery()
+
+  const getImageBySection = (section) => {
+    const image = imageData?.find((img) => img.section === section)
+    return image ? image.imageUrl : '' // Return the URL if found, otherwise an empty string
+  }
 
   const handleBecomeMemberButtonClick = (type) => {
     navigate(`my-account#${type}`, { state: { type: type } })
@@ -28,7 +36,7 @@ const Footer = () => {
         {/* Logo Section */}
         <div className="flex flex-col sm:flex-row items-center justify-center mb-8 text-center">
           <img
-            src="src/assets/images/Logo.png"
+            src={getImageBySection('logo')}
             alt="Central Wine Logo"
             className="w-10 h-10 sm:w-12 sm:h-12 mb-4 sm:mb-0 sm:mr-4"
           />

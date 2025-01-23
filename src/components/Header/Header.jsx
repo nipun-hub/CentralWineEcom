@@ -15,11 +15,19 @@ import { Button, Dropdown, Input } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useGetCartItemsQuery } from '../../features/api/cartSlice'
 import { logout } from '../../features/reducer/authSlice'
+import { useGetImageQuery } from '../../features/api/imageSlice'
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false) // Hamburger menu state
   const { toggleTheme, theme } = useContext(ThemeContext)
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
+
+    const { data: imageData} = useGetImageQuery()
+
+  const getImageBySection = (section) => {
+    const image = imageData?.find((img) => img.section === section)
+    return image ? image.imageUrl : '' // Return the URL if found, otherwise an empty string
+  }
 
   const navigate = useNavigate()
   const location = useLocation()
@@ -79,7 +87,7 @@ const Header = () => {
         {/* Logo */}
         <div className="flex items-center" onClick={() => navigate('/')}>
           <img
-            src="src/assets/images/Logo.png"
+            src={getImageBySection('logo')}
             alt="Logo"
             className="h-10 w-auto"
           />
