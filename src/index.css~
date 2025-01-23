@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Root Variables */
+:root {
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    /* Text Colors */
+    --color-text-gold-400: #FFE60D;
+    --color-text-white: #FFFFFF;
+    --color-text-white-5: rgba(255, 255, 255, 0.5);
+    --color-text-gray: #A6A6A6;
+    --color-text-black-950: #000000;
+    --color-text-gold-50: #FFFFE7;
+    --color-text-gold-700: #A67102;
+    --color-text-gold-100: #FEFFC1;
+    --color-text-gold-950: #442604;
+
+
+    /* Notification Colors */
+    --color-notification-success: #28a745;
+    --color-notification-warning: #ffc107;
+    --color-notification-error: #dc3545;
+
+    /* Theme Independent Colors*/
+    --color-primary-bg: #FFFFFF;
+    --color-gold-50: #FFFFE7;
+    --color-gold-700: #A67102;
+    --color-gold-100: #FEFFC1;
+    --color-gold-950: #442604;
+    --color-black-950: #000000;
+    --color-white-950: #FFFFFF;
+}
+
+/* Font Face */
+@font-face {
+    font-family: "Merriweather";
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Global Styles */
+body {
+    margin: 0;
+    font-family: "Merriweather", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Theme Colors */
+.light-mode-color {
+    --color-primary-bg: #FFFFFF;
+    --color-gold-50: #FFFFE7;
+    --color-gold-700: #A67102;
+    --color-gold-100: #FEFFC1;
+    --color-gold-950: #442604;
+}
+
+.dark-mode-color {
+    --color-primary-bg: #000000;
+    --color-gold-50: #FFFFE7;
+    --color-gold-700: #A67102;
+    --color-gold-100: #FEFFC1;
+    --color-gold-950: #442604;
+}
+
+.red-mode-color {
+    --color-primary-bg: #000000;
+    --color-gold-50: #FFFFE7;
+    --color-gold-700: #A67102;
+    --color-gold-100: #FEFFC1;
+    --color-gold-950: #442604;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Opera */
+}
+
+.hide-scrollbar {
+    -ms-overflow-style: none; /* For Internet Explorer and Edge */
+    scrollbar-width: none; /* For Firefox */
+}
+
+.card-custom-shadow {
+    box-shadow: 0px 10px 24px 0px rgba(0, 0, 0, 0.1);
+}
+
+.paginationCoustomCss {
+  display: none;
+}
