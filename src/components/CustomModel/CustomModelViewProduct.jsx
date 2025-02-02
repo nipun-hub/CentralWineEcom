@@ -26,7 +26,6 @@ const CustomModelViewProduct = ({ showCustomModelViewProduct, setShowCustomModel
     handleCancel()
   };
 
-
   return (
     <Modal
       title={null}
@@ -52,9 +51,11 @@ const CustomModelViewProduct = ({ showCustomModelViewProduct, setShowCustomModel
             {/* Product Details Section */}
             <div className="md:w-2/3 md:pl-8">
               {/* Star Rating */}
-              <div className="flex items-center mb-4">
-                <Rate allowHalf disabled defaultValue={product.rating / 20} className="text-yellow-500" />
-              </div>
+              {/* <div className="flex items-center mb-4">
+                <div className="text-sm font-medium text-gray-600">
+                  Rating: {product.rating}%
+                </div>
+              </div> */}
               {/* Product Title */}
               <h2 className="text-2xl sm:text-4xl font-semibold text-amber-950 mb-4">
                 {product.name}
@@ -85,7 +86,7 @@ const CustomModelViewProduct = ({ showCustomModelViewProduct, setShowCustomModel
                 }
 
                 <div>
-                {(product?.unitDiscount && product?.unitDiscount !== 0) ?
+                  {(product?.unitDiscount && product?.unitDiscount !== 0) ?
                     <span className="bg-green-100 text-green-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-full">
                       {product?.discountName} ({product?.unitDiscount}% off)
                     </span>
@@ -159,6 +160,13 @@ const CustomModelViewProduct = ({ showCustomModelViewProduct, setShowCustomModel
                       <td><span className="font-semibold text-base text-amber-950">ABV : </span> </td>
                       <td>{product.abv}</td>
                     </tr>
+
+                    {product?.rating && (
+                      <tr className="space-y-2">
+                        <td><span className="font-semibold text-base text-amber-950">Wine Rating : </span> </td>
+                        <td>{product.rating}</td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>

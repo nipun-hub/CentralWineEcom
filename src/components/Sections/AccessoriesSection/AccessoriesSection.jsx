@@ -7,7 +7,7 @@ import { useGetAllAccessoriesQuery } from '../../../features/api/productSlice'
 import { Empty } from 'antd'
 import CoustomPagination from '../../pagination/CoustomPagination.jsx'
 
-const AccessoriesSection = () => {
+const AccessoriesSection = ({title="Accessories"}) => {
   const { theme } = useContext(ThemeContext)
   const [currentPage, setCurrentPage] = useState(1)
   const {
@@ -42,7 +42,7 @@ const AccessoriesSection = () => {
     >
       {/* Best Sale Heading */}
       <h2 className="text-center text-3xl font-Merriweather font-bold leading-lg">
-        Accessories
+        {title}
       </h2>
 
       {/* Card Grid */}
