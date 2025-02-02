@@ -16,11 +16,12 @@ import Spinner from '../../components/Spinner/Spinner.jsx'
 import toast from 'react-hot-toast'
 import CustomModelRedirectMembership from '../../components/CustomModel/CustomModelRedirectMembership.jsx'
 import { DeleteOutlined, ShoppingCartOutlined } from '@ant-design/icons'
+import { getOrderData } from '../../utils/cartData.js'
+import { useEffect } from 'react'
 
 const Cart = () => {
   const { theme } = useContext(ThemeContext)
   const navigate = useNavigate()
-
   const userId = useSelector((state) => state.auth.userId)
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
@@ -31,6 +32,10 @@ const Cart = () => {
   const [clearCart, { isLoading: isClearing }] = useClearCartMutation()
   const [addToWishList] = useAddToWishListMutation()
   const [checkout, { isLoading: isCheckouting }] = useCheckoutMutation()
+  const [isPack, setIsPack] = useState({})
+
+  const [orderData, setOrderData] = useState(null);
+
 
   const [productCount, setProductCount] = useState({})
   const handleUpdateProductCount = async (productId, value, update = false) => {
@@ -62,8 +67,6 @@ const Cart = () => {
     await addToWishList(data)
   }
 
-  const [isPack, setIsPack] = useState({})
-
   const handleUpdateIsPack = (id, isPack, packSize) => {
     setIsPack((prevIsPack) => ({
       ...prevIsPack,
@@ -74,52 +77,21 @@ const Cart = () => {
     }))
   }
 
-  let isDiscount = false
-
-  const subtotal = cartItem?.reduce((total, item) => {
-    const packPrice = item?.productId?.pack?.find((pack) => pack.packSize === isPack[item?.productId?._id]?.packSize)?.packPrice || 0;
-    if (isPack[item.productId._id]?.isPack) {
-      if (item?.productId?.unitDiscount && item?.productId?.unitDiscount > 0) {
-        isDiscount = true
-        const discountedPrice =
-          packPrice -
-          (packPrice * item.productId.packDiscount) / 100
-        return total + discountedPrice * item.quantity
+  useEffect(() => {
+    const fetchOrderData = async () => {
+      if (cartItem && cartItem.length > 0) {
+        const data = await getOrderData({ cartItem, isPack });
+        setOrderData(data);
+        console.log(data)
       }
-      return total + packPrice * item.quantity
-    }
+    };
+    fetchOrderData();
+  }, [cartItem, isPack]); // Runs when cartItem or isPack changes
 
-    if (item?.productId?.unitDiscount && item?.productId?.unitDiscount > 0) {
-      isDiscount = true
-      const discountedPrice =
-        item.productId.unitPrice -
-        (item.productId.unitPrice * item.productId.unitDiscount) / 100
-      return total + discountedPrice * item.quantity
-    }
-    return total + item.productId.unitPrice * item.quantity
-  }, 0)
-
-  const totalItemQuantity = cartItem?.reduce((total, item) => {
-    const packBottleCount = isPack[item.productId._id]?.isPack
-      ? isPack[item.productId._id].packSize
-      : 1;
-    return total + item.quantity * packBottleCount;
-  }, 0);
-
-  const discount = subtotal * 0.2 // Assuming a 20% membership discount
-  const qtyDiscount = !isDiscount
-    ? totalItemQuantity >= 6
-      ? totalItemQuantity >= 12
-        ? subtotal * 0.15
-        : subtotal * 0.1
-      : 0
-    : 0
-  const tax = 0 // Example tax value
-  let total = subtotal - discount - qtyDiscount + tax
 
   let checkoutData = {
     userId,
-    totalAmount: total,
+    totalAmount: orderData?.total,
     products: cartItem?.map((item) => ({
       product: item.productId._id,
       quantity: item.quantity,
@@ -230,33 +202,33 @@ const Cart = () => {
                                   <span className="mr-2">
                                     ${' '}
                                     {product?.packDiscount &&
-                                    product?.packDiscount != 0
+                                      product?.packDiscount != 0
                                       ? (
-                                          product?.pack?.find(
-                                            (pack) =>
-                                              pack.packSize ===
-                                              isPack[productId]?.packSize,
-                                          )?.packPrice -
-                                          (product?.pack.find(
-                                            (pack) =>
-                                              pack.packSize ===
-                                              isPack[productId]?.packSize,
-                                          )?.packPrice *
-                                            product?.packDiscount) /
-                                            100
-                                        ).toFixed(2)
+                                        product?.pack?.find(
+                                          (pack) =>
+                                            pack.packSize ===
+                                            isPack[productId]?.packSize,
+                                        )?.packPrice -
+                                        (product?.pack.find(
+                                          (pack) =>
+                                            pack.packSize ===
+                                            isPack[productId]?.packSize,
+                                        )?.packPrice *
+                                          product?.packDiscount) /
+                                        100
+                                      ).toFixed(2)
                                       : product?.pack
-                                          ?.find(
-                                            (pack) =>
-                                              pack.packSize ===
-                                              isPack[productId]?.packSize,
-                                          )
-                                          ?.packPrice.toFixed(2)}
+                                        ?.find(
+                                          (pack) =>
+                                            pack.packSize ===
+                                            isPack[productId]?.packSize,
+                                        )
+                                        ?.packPrice.toFixed(2)}
                                   </span>
                                 </div>
 
                                 {product?.packDiscount &&
-                                product?.packDiscount !== 0 ? (
+                                  product?.packDiscount !== 0 ? (
                                   <span className="text-xl sm:text-2xl md:text-xl text-gray-900 font-semibold line-through opacity-80">
                                     ${' '}
                                     {product?.pack
@@ -275,19 +247,19 @@ const Cart = () => {
                                   <span className="mr-2">
                                     ${' '}
                                     {product?.unitDiscount &&
-                                    product?.unitDiscount != 0
+                                      product?.unitDiscount != 0
                                       ? (
-                                          product?.unitPrice -
-                                          (product?.unitPrice *
-                                            product?.unitDiscount) /
-                                            100
-                                        ).toFixed(2)
+                                        product?.unitPrice -
+                                        (product?.unitPrice *
+                                          product?.unitDiscount) /
+                                        100
+                                      ).toFixed(2)
                                       : product?.unitPrice.toFixed(2)}
                                   </span>
                                 </div>
 
                                 {product?.unitDiscount &&
-                                product?.unitDiscount !== 0 ? (
+                                  product?.unitDiscount !== 0 ? (
                                   <span className="text-xl sm:text-2xl md:text-xl text-gray-900 font-semibold line-through opacity-80">
                                     $ {product?.unitPrice.toFixed(2)}
                                   </span>
@@ -368,7 +340,7 @@ const Cart = () => {
                                   handleUpdateProductCount(
                                     productId,
                                     (productCount[productId] || item.quantity) -
-                                      1,
+                                    1,
                                     true,
                                   )
                                 }
@@ -394,7 +366,7 @@ const Cart = () => {
                                   handleUpdateProductCount(
                                     productId,
                                     (productCount[productId] || item.quantity) +
-                                      1,
+                                    1,
                                     true,
                                   )
                                 }
@@ -442,36 +414,36 @@ const Cart = () => {
               <div className="w-full lg:w-1/3 p-6 ">
                 <div className="flex justify-between mb-5 text-sm ">
                   <div>Order Summary</div>
-                  <div>${subtotal.toFixed(2)}</div>
+                  <div>${orderData?.subtotal | 0}</div>
                 </div>
                 <div className="flex justify-between mb-5 text-xs text-neutral-400">
                   <div>Membership Discount</div>
-                  <div>20%</div>
+                  <div>{orderData?.memberDiscount?.percentage | 0}%</div>
                 </div>
 
-                {!isDiscount ? (
+                {orderData?.bottleDiscount > 0 ? (
                   <div className="flex justify-between mb-5 text-xs text-neutral-400">
                     <div>Quantity Discount</div>
-                    <div>${qtyDiscount.toFixed(2)}</div>
+                    <div>${orderData?.bottleDiscount | 0}</div>
                   </div>
                 ) : (
                   <div className="flex justify-between mb-5 text-xs text-neutral-400">
-                    <div>Any Discount</div>
-                    <div>${discount.toFixed(2)}</div>
+                    <div>Special Discount</div>
+                    <div>${orderData?.specialDiscount | 0}</div>
                   </div>
                 )}
 
                 <div className="flex justify-between mb-5 text-xs text-neutral-400">
                   <div>Tax</div>
-                  <div>${tax.toFixed(2)}</div>
+                  <div>${orderData?.tax?.tax | 0}</div>
                 </div>
                 <div className="flex justify-between mb-5 text-xs text-neutral-400">
                   <div>Total Items</div>
-                  <div>{totalItemQuantity}</div>
+                  <div>{orderData?.totalItemQuantity | 0}</div>
                 </div>
                 <div className="flex justify-between mb-5 text-xs text-neutral-400">
-                  <div>Subtotal</div>
-                  <div>${total.toFixed(2)}</div>
+                  <div>Total</div>
+                  <div>${orderData?.total | 0}</div>
                 </div>
 
                 <Space.Compact
