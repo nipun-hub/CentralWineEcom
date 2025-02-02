@@ -14,7 +14,6 @@ import { useNavigate } from 'react-router-dom'
 import CustomModelCheckout from '../../components/CustomModel/CustomModelCheckout.jsx'
 import Spinner from '../../components/Spinner/Spinner.jsx'
 import toast from 'react-hot-toast'
-import { toastPromise } from '../../utils/notification.js'
 import CustomModelRedirectMembership from '../../components/CustomModel/CustomModelRedirectMembership.jsx'
 import { DeleteOutlined, ShoppingCartOutlined } from '@ant-design/icons'
 
@@ -49,7 +48,6 @@ const Cart = () => {
     }
   }
 
-  console.log(cartItem)
 
   const handelCheckout = async () => {
     const response = await checkout(checkoutData)
