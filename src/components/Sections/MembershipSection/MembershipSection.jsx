@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import CustomButton from '../../CustomButton/CustomButton'
 import { useNavigate } from 'react-router-dom'
-import CustomModelRedirectMembership from '../../CustomModel/CustomModelRedirectMembership.jsx'
 import { useSelector } from 'react-redux'
+import AccessDenied from '../../CustomModel/AccessDenied'
 
 const MembershipSection = ({ backgroundImage }) => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
@@ -13,17 +13,7 @@ const MembershipSection = ({ backgroundImage }) => {
   }
 
   const handleBecomeMemberButtonClick = () => {
-    if (isAuthenticated) {
-      navigate('my-account', { state: { type: 'Membership' } })
-    } else {
-      openCustomModelMembershipWorn()
-    }
-  }
-
-  const [showCustomModelMembershipWorn, setShowCustomModelMembershipWorn] =
-    useState(false)
-  const openCustomModelMembershipWorn = (id) => {
-    setShowCustomModelMembershipWorn(true)
+    navigate('my-account', { state: { type: 'Membership' } })
   }
 
   return (
@@ -95,10 +85,7 @@ const MembershipSection = ({ backgroundImage }) => {
           />
         </div>
       </div>
-      <CustomModelRedirectMembership
-        showCustomModel={showCustomModelMembershipWorn}
-        setShowCustomModel={setShowCustomModelMembershipWorn}
-      />
+
     </section>
   )
 }

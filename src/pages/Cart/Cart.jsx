@@ -14,7 +14,6 @@ import { useNavigate } from 'react-router-dom'
 import CustomModelCheckout from '../../components/CustomModel/CustomModelCheckout.jsx'
 import Spinner from '../../components/Spinner/Spinner.jsx'
 import toast from 'react-hot-toast'
-import CustomModelRedirectMembership from '../../components/CustomModel/CustomModelRedirectMembership.jsx'
 import { DeleteOutlined, ShoppingCartOutlined } from '@ant-design/icons'
 import { getOrderData } from '../../utils/cartData.js'
 import { useEffect } from 'react'
@@ -102,11 +101,6 @@ const Cart = () => {
     })),
   }
 
-  const [showCustomModelMembershipWorn, setShowCustomModelMembershipWorn] =
-    useState(false)
-  const openCustomModelMembershipWorn = (id) => {
-    setShowCustomModelMembershipWorn(true)
-  }
 
   const [showCustomModelCheckout, setShowCustomModelCheckout] = useState(false)
   const openCustomModelCheckout = (id = null) => {
@@ -114,11 +108,7 @@ const Cart = () => {
   }
 
   const handleBecomeMemberButtonClick = () => {
-    if (isAuthenticated) {
-      navigate('/my-account', { state: { type: 'Membership' } })
-    } else {
-      openCustomModelMembershipWorn()
-    }
+    navigate('/my-account', { state: { type: 'Membership' } })
   }
 
   const removeItemFromCart = ({ userId, productId }) => {
@@ -472,10 +462,6 @@ const Cart = () => {
         setShowCheckoutModal={setShowCustomModelCheckout}
         width="778px"
         data={checkoutData}
-      />
-      <CustomModelRedirectMembership
-        showCustomModel={showCustomModelMembershipWorn}
-        setShowCustomModel={setShowCustomModelMembershipWorn}
       />
     </>
   )

@@ -11,7 +11,6 @@ import { tostAlert } from '../../utils/notification'
 import { useNavigate } from 'react-router-dom'
 import Spinner from '../../components/Spinner/Spinner.jsx'
 import { data } from 'autoprefixer'
-import CustomModelRedirectMembership from '../../components/CustomModel/CustomModelRedirectMembership.jsx'
 import toast from 'react-hot-toast'
 import { DeleteOutlined, ShareAltOutlined, ShoppingCartOutlined } from '@ant-design/icons'
 
@@ -28,7 +27,7 @@ const Favorite = () => {
   const [removeFromFavorite, { isLoading: isRemoving }] =
     useRemoveFromWishListMutation()
 
-    console.log(wishListItems)
+  console.log(wishListItems)
 
   const handleRemoveFromFavorite = async (productId) => {
     toast.promise(removeFromFavorite({ userId, productId }).unwrap(), {
@@ -49,18 +48,8 @@ const Favorite = () => {
     await addToCart(data)
   }
 
-  const [showCustomModelMembershipWorn, setShowCustomModelMembershipWorn] =
-    useState(false)
-  const openCustomModelMembershipWorn = (id) => {
-    setShowCustomModelMembershipWorn(true)
-  }
-
   const handleBecomeMemberButtonClick = () => {
-    if (isAuthenticated) {
-      navigate('/my-account', { state: { type: 'Membership' } })
-    } else {
-      openCustomModelMembershipWorn()
-    }
+    navigate('/my-account', { state: { type: 'Membership' } })
   }
 
   if (isLoading) return <Spinner />
@@ -122,7 +111,7 @@ const Favorite = () => {
                             }
                           </span>
                         </div>
-                          
+
                         {(product?.unitDiscount && product?.unitDiscount !== 0) ?
                           <span className="text-2xl sm:text-4xl md:text-3xl text-gray-900 font-semibold line-through opacity-80">
                             $ {product?.unitPrice.toFixed(2)}
@@ -139,17 +128,17 @@ const Favorite = () => {
                           }
                         </div>
                       </div>
-                        
+
                       <div className='grid gap-2 mb-6'>
                         <span className="text-base opacity-50">
                           {product?.country?.name} - {product?.regions?.region}
                         </span>
-                        
+
                         <span className="text-base opacity-50">
                           Size: {product?.size?.name}
                         </span>
                       </div>
-                        
+
                       <div className="flex flex-wrap gap-5 p-5 mt-auto w-full justify-center sm:justify-start">
                         <span
                           className="flex items-center gap-2 text-xs text-red-500 cursor-pointer hover:text-red-700 transition-all duration-300"
@@ -158,14 +147,14 @@ const Favorite = () => {
                           <DeleteOutlined className="text-base" />
                           Remove
                         </span>
-                        
+
                         <span
                           className="flex items-center gap-2 text-xs text-green-500 cursor-pointer hover:text-green-700 transition-all duration-300"
                           onClick={() => handleAddToCart(product._id)}
                         >
                           <ShoppingCartOutlined className="text-base" />
                           Add to Cart
-                        </span>                
+                        </span>
                       </div>
                     </div>
 
@@ -184,10 +173,6 @@ const Favorite = () => {
             )}
           </div>
         </div>
-        <CustomModelRedirectMembership
-          showCustomModel={showCustomModelMembershipWorn}
-          setShowCustomModel={setShowCustomModelMembershipWorn}
-        />
       </section>
     </>
   )
