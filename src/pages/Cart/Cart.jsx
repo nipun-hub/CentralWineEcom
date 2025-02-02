@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Button, Empty, Input, Radio, Space } from 'antd'
 import { ThemeContext } from '../../context/ThemeContext'
 import {
@@ -16,7 +16,6 @@ import Spinner from '../../components/Spinner/Spinner.jsx'
 import toast from 'react-hot-toast'
 import { DeleteOutlined, ShoppingCartOutlined } from '@ant-design/icons'
 import { getOrderData } from '../../utils/cartData.js'
-import { useEffect } from 'react'
 
 const Cart = () => {
   const { theme } = useContext(ThemeContext)
@@ -34,7 +33,23 @@ const Cart = () => {
   const [isPack, setIsPack] = useState({})
 
   const [orderData, setOrderData] = useState(null);
+  const [randomNumber, setRandomNumber] = useState(null);
 
+  useEffect(() => {
+    // Generate random number only once when component mounts
+    const random = Math.floor(Math.random() * 1000000) + 1; // 6-digit random number
+    setRandomNumber(random);
+  }, []); // Empty dependency array means this runs only once on mount
+
+  useEffect(() => {
+    const fetchOrderData = async () => {
+      if (cartItem && cartItem.length > 0) {
+        const data = await getOrderData({ cartItem, isPack });
+        setOrderData(data);
+      }
+    };
+    fetchOrderData();
+  }, [cartItem, isPack]);
 
   const [productCount, setProductCount] = useState({})
   const handleUpdateProductCount = async (productId, value, update = false) => {
@@ -75,18 +90,6 @@ const Cart = () => {
       },
     }))
   }
-
-  useEffect(() => {
-    const fetchOrderData = async () => {
-      if (cartItem && cartItem.length > 0) {
-        const data = await getOrderData({ cartItem, isPack });
-        setOrderData(data);
-        console.log(data)
-      }
-    };
-    fetchOrderData();
-  }, [cartItem, isPack]); // Runs when cartItem or isPack changes
-
 
   let checkoutData = {
     userId,
