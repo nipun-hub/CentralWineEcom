@@ -14,7 +14,7 @@ const FilterHeader = ({
                 <Select
                     className="w-full"
                     defaultValue="Sorting  "
-                    def
+                    def="true"
                     size="large"
                     options={[
                         { value: 'priceLowToHigh', label: 'Price: Low to High' },

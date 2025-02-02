@@ -76,7 +76,7 @@ const Favorite = () => {
               &larr; Back to Store
             </Button>
             <Button
-              hoverable={false}
+              hoverable={"false"}
               className="py-6 bg-transparent"
               style={{ color: theme.textColor }}
               onClick={handleBecomeMemberButtonClick}

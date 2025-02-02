@@ -148,7 +148,7 @@ const Cart = () => {
               &larr; Back to Store
             </Button>
             <Button
-              hoverable={false}
+              hoverable={"false"}
               className="py-6 bg-transparent hidden sm:flex hover:!bg-transparent hover:scale-105"
               style={{ color: theme.textColor }}
               onClick={handleBecomeMemberButtonClick}
@@ -294,13 +294,11 @@ const Cart = () => {
                                 >
                                   {['Bottle', 'pack'].map((deluvary) => (
                                     <Radio.Button
-                                      block
+                                      block={"true"}
                                       className="w-full mt-3 mb-4"
                                       value={deluvary}
                                       key={deluvary}
                                       id={deluvary}
-                                      optionType="button"
-                                      buttonStyle="solid"
                                       size="small"
                                     >
                                       {deluvary}
