@@ -18,6 +18,7 @@ import { useCheckoutMutation } from '../../features/api/orderSlice.js'
 import TextArea from 'antd/es/input/TextArea'
 import { useClearCartMutation } from '../../features/api/cartSlice.js'
 import FormItemLabel from 'antd/es/form/FormItemLabel.js'
+import dayjs from "dayjs";
 
 const colours = [
   {
@@ -53,6 +54,9 @@ const CheckoutModal = ({
   const [formData, setFormData] = useState({})
   const [errors, setErrors] = useState({})
   const [randomDeliveryTime, setRandomDeliveryTime] = useState(null)
+
+  const officeHours = { start: 9, end: 18 }; // Office hours: 9 AM - 6 PM
+  const officeDays = [1, 2, 3, 4, 5]; // Monday to Friday
 
   useEffect(() => {
     // Generate random number only once when component mounts
@@ -354,10 +358,25 @@ const CheckoutModal = ({
                   <DatePicker
                     placeholder="Pickup Date & Time"
                     showTime
-                    onChange={(value) => handelFormChange('deliveryDate', value)}
+                    onChange={(value) => handelFormChange("deliveryDate", value)}
                     format="YYYY-MM-DD HH:mm:ss"
-                    rootClassName={`w-fit
-                    ${errors.deliveryDate && 'border border-red-500'}`}
+                    rootClassName={`w-fit ${errors.deliveryDate && "border border-red-500"}`}
+
+                    // Disable weekends (Saturday & Sunday)
+                    disabledDate={(current) => {
+                      return !officeDays.includes(current.day()) || current.isBefore(dayjs(), "day");
+                    }}
+
+                    // Disable hours outside office hours
+                    disabledTime={(current) => {
+                      if (!current) return {};
+                      return {
+                        disabledHours: () =>
+                          [...Array(24).keys()].filter(
+                            (hour) => hour < officeHours.start || hour >= officeHours.end
+                          ),
+                      };
+                    }}
                   />
                   <span className="text-red-500 text-xs">
                     {errors.deliveryDate}
@@ -370,7 +389,10 @@ const CheckoutModal = ({
                     placeholder="Delivery Date"
                     onChange={(value) => handelFormChange('deliveryDate', value)}
                     format="YYYY-MM-DD"
-                    className={`w-fit`} 
+                    className={`w-fit`}
+                    disabledDate={(current) => {
+                      return !officeDays.includes(current.day()) || current.isBefore(dayjs(), "day");
+                    }}
                   />
                 </div>
               )}
