@@ -79,7 +79,7 @@ const AccessoriesCard = ({ id, image, name, country, originalPrice, salePrice, o
           {country} - {product?.regions?.region}
         </p>
         <p className="font-Merriweather text-sm font-normal leading-[17.6px] text-gray-600 mb-2">
-          {product.size.name}
+          {product?.size?.name}
         </p>
         
         <div className="flex items-center justify-evenly">

@@ -60,18 +60,18 @@ const BestSaleSection = () => {
             openCustomModelViewProduct={openCustomModelViewProduct}
             id={product._id}
             key={index}
-            image={product.image}
-            name={product.name}
-            country={product.country.name}
+            image={product?.image}
+            name={product?.name}
+            country={product?.country?.name}
             originalPrice={
-              product.unitDiscount != 0 && product.unitDiscount
-                ? product.unitPrice
+              product?.unitDiscount != 0 && product?.unitDiscount
+                ? product?.unitPrice
                 : null
             }
             salePrice={
               product.unitDiscount != 0 && product.unitDiscount
                 ? product.unitPrice -
-                  (product.unitPrice / 100) * product.unitDiscount
+                (product.unitPrice / 100) * product.unitDiscount
                 : product.unitPrice
             }
           />
