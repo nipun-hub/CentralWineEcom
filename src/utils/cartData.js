@@ -49,7 +49,7 @@ const getSpecialDiscount = async ({ cartItem, isPack }) => {
     return cartItem?.reduce((total, item) => {
         if (isPack[item.productId._id]?.isPack) {
             const packPrice = item?.productId?.pack?.find((pack) => pack.packSize === isPack[item?.productId?._id]?.packSize)?.packPrice || 0;
-            return total + ((item?.productId?.unitDiscount > 0) ? (packPrice * item.productId.packDiscount / 100) * item.quantity : 0);
+            return total + ((item?.productId?.packDiscount > 0) ? (packPrice * item.productId.packDiscount / 100) * item.quantity : 0);
         }
         return total + ((item?.productId?.unitDiscount > 0) ? (item.productId.unitPrice * item.productId.unitDiscount / 100) * item.quantity : 0);
     }, 0);
