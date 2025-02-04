@@ -80,14 +80,14 @@ const SingleProduct = () => {
                 <div>
                   <Card className="mb-10  shadow-lg rounded-lg p-6 border border-gray-200">
                     {/* Star Rating */}
-                    <div className="flex justify-center mb-4">
+                    {/* <div className="flex justify-center mb-4">
                       <Rate
                         allowHalf
                         disabled
                         defaultValue={product?.data?.rating / 20}
                         className="text-yellow-500"
                       />
-                    </div>
+                    </div> */}
 
                     <div
                       className="text-xs mb-4 text-center"
@@ -117,15 +117,15 @@ const SingleProduct = () => {
                     <div className="mb-4 text-2xl font-semibold flex gap-5 justify-center opacity-60">
                       <span style={{ color: theme.red500 }}>
                         ${product?.data?.unitDiscount &&
-                        product?.data?.unitDiscount != 0
+                          product?.data?.unitDiscount != 0
                           ? product?.data?.unitPrice -
-                            ((product?.data?.unitPrice *
-                              product?.data?.unitDiscount) /
-                              100).toFixed(2)
+                          ((product?.data?.unitPrice *
+                            product?.data?.unitDiscount) /
+                            100).toFixed(2)
                           : product?.data?.unitPrice.toFixed(2)}
                       </span>
                       {product?.data?.unitDiscount &&
-                      product?.data?.unitDiscount !== 0 ? (
+                        product?.data?.unitDiscount !== 0 ? (
                         <span
                           className="line-through"
                           style={{ color: theme.textColor }}
@@ -136,7 +136,7 @@ const SingleProduct = () => {
                     </div>
 
                     <div
-                      className="mb-4 text-lg font-semibold flex gap-4 justify-center"
+                      className="mb-2 text-lg font-semibold flex gap-4 justify-center"
                       style={{ color: theme.textColor }}
                     >
                       <span className="">For Paid Member</span>
@@ -146,6 +146,17 @@ const SingleProduct = () => {
                           (product?.data?.unitPrice * 20) / 100}
                       </span>
                     </div>
+
+                    {product?.data?.rating && (
+                      <div
+                        className="text-xs mb-2 text-center"
+                        style={{ color: theme.textColor }}
+                      >
+                        <span className="opacity-60">
+                          Wine Rating : {product?.data?.rating}
+                        </span>
+                      </div>
+                    )}
 
                     <div className="mb-3">
                       {product?.data?.inStock ? (
@@ -254,7 +265,7 @@ const SingleProduct = () => {
             </div>
           </Card>
 
-          <AccessoriesSection />
+          <AccessoriesSection title="Suggested Items" />
         </div>
       </section>
     </>

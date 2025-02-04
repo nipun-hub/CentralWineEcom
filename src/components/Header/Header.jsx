@@ -22,7 +22,7 @@ const Header = () => {
   const { toggleTheme, theme } = useContext(ThemeContext)
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
 
-    const { data: imageData} = useGetImageQuery()
+  const { data: imageData } = useGetImageQuery()
 
   const getImageBySection = (section) => {
     const image = imageData?.find((img) => img.section === section)
@@ -126,10 +126,10 @@ const Header = () => {
                   className={`relative text-xl cursor-pointer hover:text-colorTextGold400 ${currentPath === '/cart' && 'text-colorTextGold400'}`}
                 />
                 <span
-                  class={`relative flex h-3 w-3 ${(!cartItem?.length > 0 || !isAuthenticated) && 'hidden'}`}
+                  className={`relative flex h-3 w-3 ${(!cartItem?.length > 0 || !isAuthenticated) && 'hidden'}`}
                 >
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
                 </span>
               </div>
             </Link>
@@ -162,9 +162,8 @@ const Header = () => {
               />
             )}
             <div
-              className={`relative flex items-center rounded-full ps-2 h-[33px] transition-all duration-300 ${
-                isExpanded ? 'w-[263px]' : 'w-10'
-              }`}
+              className={`relative flex items-center rounded-full ps-2 h-[33px] transition-all duration-300 ${isExpanded ? 'w-[263px]' : 'w-10'
+                }`}
               style={{
                 borderWidth: isExpanded ? '1px' : '0px',
                 borderColor: 'white',

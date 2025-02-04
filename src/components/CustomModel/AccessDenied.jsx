@@ -1,23 +1,23 @@
 import React from 'react'
-import { Button, Modal } from 'antd'
+import { Modal } from 'antd'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 
-const CustomModelRedirectMembership = ({
-  showCustomModel,
-  setShowCustomModel,
+const AccessDenied = ({
+  open,
+  setOpen,
   width = 400,
 }) => {
   const navigate = useNavigate()
 
   const handleCancel = () => {
-    setShowCustomModel(false)
+    setOpen(false)
   }
 
   const handleRedirect = () => {
     // Navigate to the membership page
     navigate('/membership') // Adjust this path according to your app's routing
-    setShowCustomModel(false)
+    setOpen(false)
   }
 
 
@@ -25,7 +25,7 @@ const CustomModelRedirectMembership = ({
   return (
     <Modal
       title={null}
-      open={showCustomModel}
+      open={open}
       onCancel={handleCancel}
       footer={null}
       width={width}
@@ -40,8 +40,7 @@ const CustomModelRedirectMembership = ({
             Access denied
           </h3>
           <p className="text-sm text-gray-600 mt-2 mb-6">
-            You need to be a registered member to access this page. Please sign
-            up to proceed.
+            You need to be a registered member to access this feature. Please sign up for a membership to continue.
           </p>
         </div>
         <div className="flex gap-4 justify-center">
@@ -63,4 +62,4 @@ const CustomModelRedirectMembership = ({
   )
 }
 
-export default CustomModelRedirectMembership
+export default AccessDenied

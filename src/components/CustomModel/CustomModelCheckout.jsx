@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Button,
   Card,
@@ -18,33 +18,29 @@ import { useCheckoutMutation } from '../../features/api/orderSlice.js'
 import TextArea from 'antd/es/input/TextArea'
 import { useClearCartMutation } from '../../features/api/cartSlice.js'
 import FormItemLabel from 'antd/es/form/FormItemLabel.js'
+import dayjs from "dayjs";
 
 const colours = [
   {
-    color1: '#FFFFFF',
-    color2: '#FFFD86',
-    colorDoct: '#A67102',
+    color1: '#FFF9E8',
+    color2: '#FFE4B0',
+    colorDoct: '#FFB800',
   },
   {
-    color1: '#ffffff',
-    color2: '#FEFFC1',
-    colorDoct: '#A67102',
+    color1: '#F5F9FF',
+    color2: '#E0EEFF',
+    colorDoct: '#4B9FFF',
   },
   {
-    color1: '#f3f4f6',
-    color2: '#e5e7eb',
-    colorDoct: '#d1d5db',
+    color1: '#FFF5F5',
+    color2: '#FFE0E0',
+    colorDoct: '#FF4D4D',
   },
   {
-    color1: '#FEFFC1',
-    color2: '#442604',
-    colorDoct: '#A67102',
-  },
-  {
-    color1: '#FEFFC1',
-    color2: '#89580A',
-    colorDoct: '#442604',
-  },
+    color1: '#F2FFF5',
+    color2: '#D6FFE0',
+    colorDoct: '#00B327',
+  }
 ]
 
 const CheckoutModal = ({
@@ -57,6 +53,18 @@ const CheckoutModal = ({
   const [currentState, setCurrentState] = useState('selectAddress') // selectAddress, selectPaymentMethod
   const [formData, setFormData] = useState({})
   const [errors, setErrors] = useState({})
+  const [randomDeliveryTime, setRandomDeliveryTime] = useState(null)
+
+  const officeHours = { start: 9, end: 18 }; // Office hours: 9 AM - 6 PM
+  const officeDays = [1, 2, 3, 4, 5]; // Monday to Friday
+
+  useEffect(() => {
+    // Generate random number only once when component mounts
+    if (randomDeliveryTime === null) {
+      const random = Math.floor(Math.random() * 4)
+      setRandomDeliveryTime(random)
+    }
+  }, []) // Empty dependency array means this runs only once on mount
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -225,51 +233,55 @@ const CheckoutModal = ({
               <div className="w-full my-2">
                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-5 mt-5 justify-center justify-items-center">
                   {addressData?.map((address) => {
-                    const randomNumber = Math.floor(Math.random() * 5)
                     return (
                       <div
                         key={address._id}
-                        className={`relative w-full max-w-[482px] p-6 rounded-lg shadow-md bg-white hover:shadow-lg cursor-pointer transition-transform transform hover:scale-105 
-                            ${errors.address ? 'border-2 border-red-500' : 'border border-gray-300'} 
-                            ${formData.address === address._id ? 'border-2 border-blue-400' : ''}`}
-                        onClick={() => handelFormChange('address', address._id)}
+                        className={`relative w-full max-w-[500px] p-5 rounded-xl shadow-lg bg-white hover:shadow-xl transition-transform transform hover:scale-105 cursor-pointer
+                          ${errors.address ? "border-2 border-red-500" : "border border-gray-300"} 
+                          ${formData.address === address._id ? "border-2 border-blue-500 bg-blue-50" : ""}`}
+                        onClick={() => handelFormChange("address", address._id)}
                       >
-                        {/* Background Decoration */}
+                        {/* Background Decorations */}
                         <div
-                          className="absolute inset-0 rounded-lg"
-                          style={{
-                            backgroundColor:
-                              colours[randomNumber]?.color1 || '#f0f4f8',
-                            zIndex: -1,
-                          }}
+                          className="absolute inset-0 rounded-xl"
+                          style={{ backgroundColor: colours[randomDeliveryTime]?.color1 || "#f0f4f8", zIndex: -1 }}
                         />
                         <div
-                          className="absolute inset-0 hidden md:block rounded-lg"
+                          className="absolute inset-0 hidden md:block rounded-xl"
                           style={{
-                            backgroundColor:
-                              colours[randomNumber]?.color2 || '#e0e7ec',
-                            clipPath: 'circle(60% at 100% 25%)',
-                          }}
-                        />
-                        <div
-                          className="absolute top-4 right-4 w-5 h-5 rounded-full"
-                          style={{
-                            backgroundColor:
-                              colours[randomNumber]?.colorDoct || '#c0c7ce',
+                            backgroundColor: colours[randomDeliveryTime]?.color2 || "#e0e7ec",
+                            clipPath: "circle(60% at 100% 20%)",
                           }}
                         />
 
                         {/* Address Content */}
-                        <div className="relative z-10">
-                          <h2 className="text-lg font-semibold text-gray-800 mb-3">
-                            {address.fullName}
-                          </h2>
-                          <div className="text-gray-600 text-sm space-y-2">
-                            <p>{address.streetAddress}</p>
+                        <div className="relative flex items-start space-x-4">
+                          {/* Selection Indicator */}
+                          {formData.address === address._id && (
+                            <div className="absolute top-4 right-4">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="w-6 h-6 text-blue-500"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M20.285 6.709a1 1 0 01.017 1.412l-10 11a1 1 0 01-1.45.043l-5-5a1 1 0 011.414-1.414l4.193 4.193 9.288-10.204a1 1 0 011.538 1.38z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </div>
+                          )}
+
+                          {/* Address Details */}
+                          <div className="flex-1">
+                            <h2 className="text-lg font-semibold text-gray-800">{address.fullName}</h2>
+                            <p className="text-gray-600 text-sm">{address.streetAddress}</p>
                             {address.additionalAddress && (
-                              <p>{address.additionalAddress}</p>
+                              <p className="text-gray-500 text-sm">{address.additionalAddress}</p>
                             )}
-                            <p>
+                            <p className="text-gray-600 text-sm">
                               {address.city}, {address.state} {address.zipCode}
                             </p>
                           </div>
@@ -340,20 +352,48 @@ const CheckoutModal = ({
                 </Card>
               </div>
 
-              {formData?.deliveryType == 'Pickup' && (
+              {formData?.deliveryType == 'Pickup' ? (
                 <div className="w-full my-2 gap-2 flex flex-col items-left justify-left text-start">
-                  <FormItemLabel label="Select Pickup Date & Time" />
+                  <FormItemLabel label="Select Pickup Date & Time *" />
                   <DatePicker
                     placeholder="Pickup Date & Time"
                     showTime
-                    onChange={(value) => handelFormChange('deliveryDate', value)}
+                    onChange={(value) => handelFormChange("deliveryDate", value)}
                     format="YYYY-MM-DD HH:mm:ss"
-                    rootClassName={`w-fit
-                    ${errors.deliveryDate && 'border border-red-500'}`}
+                    rootClassName={`w-fit ${errors.deliveryDate && "border border-red-500"}`}
+
+                    // Disable weekends (Saturday & Sunday)
+                    disabledDate={(current) => {
+                      return !officeDays.includes(current.day()) || current.isBefore(dayjs(), "day");
+                    }}
+
+                    // Disable hours outside office hours
+                    disabledTime={(current) => {
+                      if (!current) return {};
+                      return {
+                        disabledHours: () =>
+                          [...Array(24).keys()].filter(
+                            (hour) => hour < officeHours.start || hour >= officeHours.end
+                          ),
+                      };
+                    }}
                   />
                   <span className="text-red-500 text-xs">
                     {errors.deliveryDate}
                   </span>
+                </div>
+              ) : (
+                <div className="w-full my-2 gap-2 flex flex-col items-left justify-left text-start">
+                  <FormItemLabel label="Select Delivery Date" />
+                  <DatePicker
+                    placeholder="Delivery Date"
+                    onChange={(value) => handelFormChange('deliveryDate', value)}
+                    format="YYYY-MM-DD"
+                    className={`w-fit`}
+                    disabledDate={(current) => {
+                      return !officeDays.includes(current.day()) || current.isBefore(dayjs(), "day");
+                    }}
+                  />
                 </div>
               )}
             </div>
@@ -408,7 +448,6 @@ const CheckoutModal = ({
                   </div>
                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 mt-10 justify-center justify-items-center">
                     {paymentData?.map((payment) => {
-                      const randomNumber = Math.floor(Math.random() * 5)
                       return (
                         <div
                           key={payment._id}
@@ -434,14 +473,14 @@ const CheckoutModal = ({
                           <div
                             className="absolute inset-0"
                             style={{
-                              backgroundColor: colours[randomNumber].color1,
+                              backgroundColor: colours[randomDeliveryTime].color1,
                             }}
                           />
 
                           <div
                             className="absolute inset-0"
                             style={{
-                              backgroundColor: colours[randomNumber].color2,
+                              backgroundColor: colours[randomDeliveryTime].color2,
                               clipPath: 'circle(60% at 100% 25%)',
                             }}
                           />
@@ -449,7 +488,7 @@ const CheckoutModal = ({
                           <div
                             className="absolute top-4 right-10 w-5 h-5 rounded-full"
                             style={{
-                              backgroundColor: colours[randomNumber].colorDoct,
+                              backgroundColor: colours[randomDeliveryTime].colorDoct,
                             }}
                           />
 

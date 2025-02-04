@@ -1,23 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
-import Header from '../../components/Header/Header'
-import Footer from '../../components/Footer/Footer'
 import { ThemeContext } from '../../context/ThemeContext'
-import { Input, Button, Radio, Divider, Card } from 'antd'
 import {
   CreditCardOutlined,
-  DeleteOutlined,
-  EditOutlined,
   EnvironmentOutlined,
-  ExportOutlined,
   HistoryOutlined,
   IdcardOutlined,
-  RightOutlined,
   UserOutlined,
 } from '@ant-design/icons'
-import Cart from '../Cart/Cart'
-import AccessoriesCard from '../../components/Cards/AccessoriesCard'
-import CustomModelOne from '../../components/CustomModel/CustomModel'
-import CustomModelViewProduct from '../../components/CustomModel/CustomModelViewProduct'
 import MyAccount from './MyAccount'
 import OrderHistory from './OrderHistory'
 import Membership from './Membership'
@@ -25,21 +14,28 @@ import { useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import AddressBlock from './AddressBlock'
 import PaymentMethod from './PaymentMethord'
+import AccessDenied from '../../components/CustomModel/AccessDenied'
 
 const Account = () => {
   const { theme } = useContext(ThemeContext)
   const user = useSelector((state) => state.auth)
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
   const navigate = useNavigate()
+  const [open, setOpen] = useState(false);
 
   // get navigate data
   const location = useLocation()
   const { type: navigationType } = location.state || {}
 
-  if (!user?.isAuthenticated) {
-    navigate('/')
-  }
-
   const [currentSlide, setCurrentSlide] = useState('MyAccount')
+
+  const changeSlide = (slide) => {
+    if (isAuthenticated) {
+      setCurrentSlide(slide)
+    } else {
+      setOpen(true)
+    }
+  }
 
   useEffect(() => {
     if (navigationType && currentSlide != navigationType) {
@@ -51,6 +47,10 @@ const Account = () => {
     }
   }, [navigate, location])
 
+  if (!isAuthenticated && currentSlide != 'Membership') {
+    navigate('/')
+  }
+
   return (
     <div style={{ backgroundColor: theme.background }}>
       <div className=" lg:container mx-auto p-6 ">
@@ -59,7 +59,7 @@ const Account = () => {
             <div
               className={`flex items-center space-x-2 text-sm lg:text-lg font-semibold ${currentSlide == 'MyAccount' ? 'opacity-100' : 'opacity-60 hover:opacity-70'}`}
               style={{ color: theme.textColor }}
-              onClick={() => setCurrentSlide('MyAccount')}
+              onClick={() => changeSlide('MyAccount')}
             >
               <UserOutlined
                 className={`text-sm lg:text-lg p-2 rounded-full  ${currentSlide == 'MyAccount' ? 'bg-gray-300' : 'bg-transparent'}`}
@@ -80,7 +80,7 @@ const Account = () => {
               <div
                 className={`flex items-center space-x-2 text-sm lg:text-lg font-semibold ${currentSlide == 'Address' ? 'opacity-100' : 'opacity-60 hover:opacity-70'}`}
                 style={{ color: theme.textColor }}
-                onClick={() => setCurrentSlide('Address')}
+                onClick={() => changeSlide('Address')}
               >
                 <EnvironmentOutlined
                   className={`text-sm lg:text-lg p-2 rounded-full  ${currentSlide == 'Address' ? 'bg-gray-300' : 'bg-transparent'}`}
@@ -90,7 +90,7 @@ const Account = () => {
               <div
                 className={`flex items-center space-x-2 text-sm lg:text-lg font-semibold ${currentSlide == 'Payment' ? 'opacity-100' : 'opacity-60 hover:opacity-70'}`}
                 style={{ color: theme.textColor }}
-                onClick={() => setCurrentSlide('Payment')}
+                onClick={() => changeSlide('Payment')}
               >
                 <CreditCardOutlined
                   className={`text-sm lg:text-lg p-2 rounded-full  ${currentSlide == 'Payment' ? 'bg-gray-300' : 'bg-transparent'}`}
@@ -100,7 +100,7 @@ const Account = () => {
               <div
                 className={`flex items-center space-x-2 text-sm lg:text-lg font-semibold ${currentSlide == 'OrderHistory' ? 'opacity-100' : 'opacity-60 hover:opacity-70'}`}
                 style={{ color: theme.textColor }}
-                onClick={() => setCurrentSlide('OrderHistory')}
+                onClick={() => changeSlide('OrderHistory')}
               >
                 <HistoryOutlined
                   className={`text-sm lg:text-lg p-2 rounded-full  ${currentSlide == 'OrderHistory' ? 'bg-gray-300' : 'bg-transparent'}`}
@@ -121,6 +121,10 @@ const Account = () => {
           </div>
         </div>
       </div>
+      <AccessDenied
+        open={open}
+        setOpen={setOpen}
+      />
     </div>
   )
 }
