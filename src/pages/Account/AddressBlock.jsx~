@@ -1,0 +1,205 @@
+import React, { useContext, useState } from 'react'
+import { ThemeContext } from '../../context/ThemeContext'
+import { Button } from 'antd'
+import CustomModelAddressBlock from '../../components/CustomModel/CustomModelAddressBlock'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+
+const AddressBlock = () => {
+  const { theme } = useContext(ThemeContext)
+
+  const [showCustomModelAddressBlock, setShowCustomModelAddressBlock] =
+    useState(false)
+  const openCustomModelAddressBlock = (id = null) => {
+    setShowCustomModelAddressBlock(true)
+  }
+
+  const colours = [
+    {
+      color1: '#FFFFFF',
+      color2: '#FFFD86',
+      colorDoct: '#A67102',
+    },
+    {
+      color1: '#ffffff',
+      color2: '#FEFFC1',
+      colorDoct: '#A67102',
+    },
+    {
+      color1: '#f3f4f6',
+      color2: '#e5e7eb',
+      colorDoct: '#d1d5db',
+    },
+    {
+      color1: '#FEFFC1',
+      color2: '#442604',
+      colorDoct: '#A67102',
+    },
+    {
+      color1: '#FEFFC1',
+      color2: '#89580A',
+      colorDoct: '#442604',
+    },
+  ]
+
+  const addresses = [
+    {
+      fullName: 'John Doe',
+      streetAddress: '123 Main Street',
+      additionalAddress: 'Apartment 4B',
+      city: 'New York',
+      state: 'NY',
+      zipCode: '10001',
+      isDefault: true,
+      _id: '1a2b3c4d5e6f7g8h9i0j',
+      createdAt: '2024-11-30T07:35:16.830Z',
+      updatedAt: '2024-11-30T07:35:16.830Z',
+    },
+    {
+      fullName: 'Jane Smith',
+      streetAddress: '456 Elm Street',
+      additionalAddress: 'Suite 500',
+      city: 'Los Angeles',
+      state: 'CA',
+      zipCode: '90001',
+      isDefault: false,
+      _id: '2b3c4d5e6f7g8h9i0j1k',
+      createdAt: '2024-11-30T07:35:16.830Z',
+      updatedAt: '2024-11-30T07:35:16.830Z',
+    },
+    {
+      fullName: 'Michael Johnson',
+      streetAddress: '789 Market Street',
+      additionalAddress: 'Unit 2A',
+      city: 'Chicago',
+      state: 'IL',
+      zipCode: '60601',
+      isDefault: false,
+      _id: '3c4d5e6f7g8h9i0j1k2l',
+      createdAt: '2024-11-30T07:35:16.830Z',
+      updatedAt: '2024-11-30T07:35:16.830Z',
+    },
+    {
+      fullName: 'Emily Davis',
+      streetAddress: '101 Broadway',
+      additionalAddress: '',
+      city: 'Houston',
+      state: 'TX',
+      zipCode: '77001',
+      isDefault: false,
+      _id: '4d5e6f7g8h9i0j1k2l3m',
+      createdAt: '2024-11-30T07:35:16.830Z',
+      updatedAt: '2024-11-30T07:35:16.830Z',
+    },
+    {
+      fullName: 'William Brown',
+      streetAddress: '202 Sunset Boulevard',
+      additionalAddress: 'Penthouse',
+      city: 'Miami',
+      state: 'FL',
+      zipCode: '33101',
+      isDefault: false,
+      _id: '5e6f7g8h9i0j1k2l3m4n',
+      createdAt: '2024-11-30T07:35:16.830Z',
+      updatedAt: '2024-11-30T07:35:16.830Z',
+    },
+  ]
+
+  return (
+    <>
+      {/* Address Book section */}
+      <div className="relative flex items-center justify-between">
+        <div
+          className="text-lg sm:text-3xl w-fit z-10"
+          style={{ backgroundColor: theme.background }}
+        >
+          Address Book
+        </div>
+        <div
+          className="absolute bg-transparent h-0.5 rounded w-full z-0"
+          style={{ backgroundColor: theme.textColor }}
+        ></div>
+        <div>
+          <Button
+            className="font-semibold w-fit md:w-40 p-0"
+            shape="round"
+            icon={<EditOutlined />}
+            size="large"
+            onClick={openCustomModelAddressBlock}
+          >
+            <div className="hidden sm:inline">New</div>
+          </Button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 mt-10 justify-center justify-items-center">
+        {addresses.map((item, index) => {
+          const randomNumber = Math.floor(Math.random() * 5)
+          return (
+            <div
+              key={index}
+              className="relative w-full max-w-[482px] rounded-2xl shadow-sm p-4 md:p-6 overflow-hidden min-h-[245px]"
+            >
+              {/* Background layers */}
+              <div
+                className="absolute inset-0"
+                style={{ backgroundColor: colours[randomNumber].color1 }} // Example color, replace with dynamic if needed
+              />
+
+              <div
+                className="absolute inset-0"
+                style={{
+                  backgroundColor: colours[randomNumber].color2,
+                  clipPath: 'circle(60% at 100% 25%)',
+                }}
+              />
+
+              <div
+                className="absolute top-4 right-4 w-5 h-5 rounded-full"
+                style={{ backgroundColor: colours[randomNumber].colorDoct }} // Example color, replace dynamically if needed
+              />
+
+              {/* Content */}
+              <div className="relative z-10 p-5">
+                <h2 className="text-sm sm:text-lg font-bold text-black mb-4">
+                  {item.fullName}
+                </h2>
+
+                <div className="space-y-1.5 text-gray-600 text-sm  sm:text-lg font-bold flex flex-col gap-4">
+                  <p>{item.streetAddress}</p>
+                  {item.additionalAddress && <p>{item.additionalAddress}</p>}
+                  <p>
+                    {item.city}, {item.state} {item.zipCode}
+                  </p>
+                </div>
+
+                <div className="absolute -bottom-3 right-0 flex gap-4 pe-5">
+                  <button
+                    className="p-2.5 bg-white rounded-full shadow-sm hover:bg-gray-50 transition-colors"
+                    aria-label="Edit"
+                    onClick={() => openCustomModelAddressBlock(item)}
+                  >
+                    <EditOutlined />
+                  </button>
+                  <button
+                    className="p-2.5 bg-white rounded-full shadow-sm hover:bg-gray-50 transition-colors"
+                    aria-label="Delete"
+                  >
+                    <DeleteOutlined />
+                  </button>
+                </div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      <CustomModelAddressBlock
+        showCustomModel={showCustomModelAddressBlock}
+        setShowCustomModel={setShowCustomModelAddressBlock}
+        width="778px"
+      />
+    </>
+  )
+}
+
+export default AddressBlock

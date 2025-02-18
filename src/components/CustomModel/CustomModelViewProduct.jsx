@@ -141,20 +141,26 @@ const CustomModelViewProduct = ({ showCustomModelViewProduct, setShowCustomModel
                       <td>{product.country.name} - {product.regions.region} - {product?.subRegions?.name}</td>
                     </tr>
 
-                    <tr className="space-y-2">
-                      <td><span className="font-semibold text-base text-amber-950">Vintage : </span> </td>
-                      <td>{product.vintage.year}</td>
-                    </tr>
+                    {product?.vintage?.year && (
+                      <tr className="space-y-2">
+                        <td><span className="font-semibold text-base text-amber-950">Vintage : </span> </td>
+                        <td>{product?.vintage?.year}</td>
+                      </tr>
+                    )}
 
                     <tr className="space-y-2">
                       <td><span className="font-semibold text-base text-amber-950">Size : </span> </td>
                       <td>{product.size.name}</td>
                     </tr>
 
-                    <tr className="space-y-2">
-                      <td><span className="font-semibold text-base text-amber-950">Type : </span> </td>
-                      <td>{product?.type.map((type) => (type.name + ' , '))}</td>
-                    </tr>
+                    {
+                      (product?.type && product?.type.length > 0) && (
+                        <tr className="space-y-2">
+                          <td><span className="font-semibold text-base text-amber-950">Type : </span> </td>
+                          <td>{product?.type.map((type) => (type.name + ' , '))}</td>
+                        </tr>
+                      )
+                    }
 
                     <tr className="space-y-2">
                       <td><span className="font-semibold text-base text-amber-950">ABV : </span> </td>

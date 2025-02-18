@@ -139,11 +139,11 @@ const SingleProduct = () => {
                       className="mb-2 text-lg font-semibold flex gap-4 justify-center"
                       style={{ color: theme.textColor }}
                     >
-                      <span className="">For Paid Member</span>
+                      <span>For Paid Member</span>
                       <span className="opacity-60">
                         ${' '}
-                        {product?.data?.unitPrice -
-                          (product?.data?.unitPrice * 20) / 100}
+                        {(product?.data?.unitPrice -
+                          (product?.data?.unitPrice * 20) / 100).toFixed(2)}
                       </span>
                     </div>
 
