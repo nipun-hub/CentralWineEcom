@@ -29,7 +29,7 @@ COPY --from=build /app/dist /app/dist
 RUN npm install -g serve
 
 # Step 11: Expose port 3001
-EXPOSE 3001
+EXPOSE 6100
 
 # Step 12: Serve the app
-CMD ["serve", "-s", "dist", "-l", "3001"]
+CMD ["serve", "-s", "dist", "-l", "6100"]
