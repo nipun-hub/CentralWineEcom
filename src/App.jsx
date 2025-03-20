@@ -10,8 +10,6 @@ function App() {
   const { theme } = useContext(ThemeContext);
   const user = useSelector((state) => (state.auth.userId));
 
-  console.log(user)
-
   return (
     <div
       style={{
